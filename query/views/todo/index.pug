@@ -1,0 +1,9 @@
+h1 To Do List
+form(action="/todo/search", method="search")
+    input(type="text", name="q")
+    button Search
+ul
+  each item in lists
+    li= item
+
+

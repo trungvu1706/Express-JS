@@ -1,0 +1,11 @@
+
+h1 Users
+form(action="/users/search", method="search")
+    input(type="text", name="q")
+    button Search
+ul
+    each user in users 
+       li= user.name
+
+
+
