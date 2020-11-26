@@ -1,0 +1,9 @@
+h1 Users Lists
+
+a(href="/users/create") new
+
+form(action="/users")
+  
+      ul
+        each user in users  
+            li= user.name

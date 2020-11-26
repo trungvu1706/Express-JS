@@ -1,0 +1,24 @@
+{
+  "users": [
+    {
+      "name": "trung"
+    },
+    {
+      "name": "hoang anh"
+    }
+  ],
+  "todos": [
+    {
+      "act": "test"
+    },
+    {
+      "act": "swimming"
+    },
+    {
+      "act": "playing football"
+    },
+    {
+      "act": "running"
+    }
+  ]
+}
