@@ -1,0 +1,21 @@
+h1 To Do List
+
+a(href="/todo/create") Create List
+span &nbsp
+
+
+
+
+form(action="/todo")
+
+    label List: 
+    ul 
+        each item in lists
+            li= item.action
+            
+            a(href="/todo/" +item.id + "/delete") Delete item
+                
+  
+            
+                
+                //-  /todo/dhjasdhashda/delete
