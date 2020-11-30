@@ -1,0 +1,21 @@
+h1 INFOMATION ABOUT THE BOOK
+
+form(action="/books/" + book.id + "/view", method="view")
+    lable Book Id 
+    span &nbsp
+    input(type="text", value= book.id disabled)
+    br
+
+    lable Book Name
+    input(type="text", value= book.title disabled)
+    span &nbsp
+    br
+
+    lable Description
+    span &nbsp
+    input(type="text", value= book.description disabled)
+
+
+
+a(href="/books") Back
+    
