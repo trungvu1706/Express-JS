@@ -1,0 +1,18 @@
+h1 CREATE TRANSACTION
+
+form(action="/transactions/create", method="POST")
+    lable User ID 
+    div
+        select(name="userId")
+            each user in users
+                option(value=user.id)= user.name
+    
+    br
+    lable Book ID 
+    div
+        select(name="bookId")
+            each book in books
+                option(value=book.id)= book.title
+
+    br
+    button Create

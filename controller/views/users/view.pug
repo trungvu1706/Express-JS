@@ -1,0 +1,13 @@
+h1 USER PROFILE
+
+form(action="/users/view")
+    lable ID
+    span &nbsp
+    input(type="text", value=user.id, disabled)
+    br
+    br
+    lable Name
+    span &nbsp
+    input(type="text", value=user.name, disabled)    
+    br
+    a(href="/users") Back
