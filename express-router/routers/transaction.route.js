@@ -27,6 +27,7 @@ router.get('/', function(req, res) {
         var obj = {};
 
         obj.id = transaction.id;
+        console.log(obj.id);
         users.map(function(user) {
             if (transaction.userId === user.id) {
                 return obj.user = user;
@@ -35,7 +36,7 @@ router.get('/', function(req, res) {
 
 
         books.map(function(book) {
-            if (transaction.bookId == book.id) {
+            if (transaction.bookId === book.id) {
                 return obj.book = book;
             }
         });
