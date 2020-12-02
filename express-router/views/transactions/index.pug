@@ -1,0 +1,23 @@
+h1 TRANSACTION
+
+a(href="/transactions/create") Create
+
+
+form(action="/transactions")
+    ul
+        each transaction in transactions
+             li
+    
+                lable User Name
+                span &nbsp
+                input(type="text", value=transaction.user.name, disabled)
+                br
+
+                lable Book Name
+                span &nbsp
+                input(type="text", value=transaction.book.title, disabled)
+                br
+
+                lable Status 
+                span &nbsp
+                span Rent

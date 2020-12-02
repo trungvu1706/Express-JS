@@ -4,6 +4,7 @@ var path = require('path');
 
 var bookRoute = require('./routers/book.route');
 var userRoute = require('./routers/user.route');
+var transactionRoute = require('./routers/transaction.route');
 
 var port = 3000;
 
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ extended: true })) // for parsing application/x-www
 
 app.use('/books', bookRoute);
 app.use('/users', userRoute);
+app.use('/transactions', transactionRoute);
 
 app.listen(port, function() {
     console.log('Server listening on port ' + port);

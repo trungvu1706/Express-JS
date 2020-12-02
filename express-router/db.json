@@ -33,5 +33,22 @@
       "name": "Hoàng Tuấn Lương",
       "id": "rrO7bfL_7"
     }
+  ],
+  "transactions": [
+    {
+      "userId": "rrO7bfL_7",
+      "bookId": "4aMOwz4b-",
+      "id": "Nde5ioZwL"
+    },
+    {
+      "userId": "jxKEVKUWN",
+      "bookId": "k7GxAn4ce",
+      "id": "ldQNZUcHX"
+    },
+    {
+      "userId": "oLY3spiUT",
+      "bookId": "4aMOwz4b-",
+      "id": "zgCFLUI0b"
+    }
   ]
 }

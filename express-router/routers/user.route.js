@@ -18,10 +18,11 @@ router.get('/create', function(req, res) {
 router.get('/search', function(req, res) {
     var q = req.query.q;
     var searchUser = db.get('users').value();
-    var matchedUser = searchUser.filter(function(user) {
-        console.log(matchedUser);
+    var matchedUser = searchUser.filter(function(user) { // [{ name: "" }]
         return user.name.toLowerCase().indexOf(q.toLowerCase()) !== -1;
     });
+
+    console.log(matchedUser);
     res.render('users/index', {
         lists: matchedUser
     });
