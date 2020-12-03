@@ -1,0 +1,26 @@
+extends ../layouts/common 
+block content
+
+   h1 LIST OF BOOKS FOR YOU
+
+   a(href="/books/create") Create book 
+
+   form(action="/books/search", method="search")
+      lable book's name
+      input(type="text", name="q")
+      button Search
+      span &nbsp
+      ul
+            each item in lists
+               li= item.title
+               a(href="/books/" + item.id + "/view") View
+               span &nbsp
+               a(href="/books/" + item.id + "/delete") Delete Book
+               span &nbsp
+               a(href="/books/" + item.id + "/update") Update Book
+
+               
+   div
+      a(href="/home") Back
+
+
