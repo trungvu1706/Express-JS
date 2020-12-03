@@ -1,0 +1,28 @@
+extends ../layouts/common 
+block content
+    
+    h1 USERS 
+
+    a(href="/users/create") Create
+    br    
+
+    form(action="/users/search", method="GET")
+        lable user name 
+        span &nbsp
+        input(type="text", name="q")
+        span &nbsp
+        button Search   
+
+    
+        ul 
+            each user in lists
+                li= user.name
+                    a(href="/users/" + user.id + "/view") View
+                    span &nbsp
+                    a(href="/users/" + user.id + "/update") Update
+                    span &nbsp
+                    a(href="/users/" + user.id + "/delete") Delete         
+
+    div
+        a(href="/home") Back
+        

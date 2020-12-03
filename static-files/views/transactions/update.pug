@@ -1,0 +1,30 @@
+extends ../layouts/common 
+block content
+    
+    
+    
+    h1 UPDATE STATUS OF TRANSACTIONS
+
+    form(action="/transactions/" + transaction.id + "/update", method="POST")
+        lable User ID
+        div 
+        select(name="userId")
+                each user in users
+                    option(value=user.id, selected=transaction.userId===user.id)= user.name
+        br                     
+                
+        lable User ID
+        div 
+            select(name="bookId")
+                each book in books
+                    option(value=book.id, selected=transaction.bookId===book.id)= book.title
+        
+        br
+
+        lable Status
+        div 
+            select(name="isComplete")
+                option(value="true", selected=transaction.isComplete) returned
+                option(value="false", selected=!transaction.isComplete) rent
+        div
+            button Submit
