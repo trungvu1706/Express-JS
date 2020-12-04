@@ -40,6 +40,7 @@ module.exports.index = function(req, res) {
         return result.push(obj);
     });
 
+    console.log(result);
     res.render('transactions/index', {
         transactions: result
     });

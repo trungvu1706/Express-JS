@@ -50,7 +50,6 @@ app.get('/todo/create', function(req, res) {
 app.post('/todo/create', function(req, res) {
     db.get('todos').push(req.body).write();
     res.redirect('/todo');
-
 });
 
 

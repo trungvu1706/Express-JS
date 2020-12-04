@@ -63,7 +63,7 @@
       "userId": "jxKEVKUWN",
       "bookId": "k7GxAn4ce",
       "id": "ldQNZUcHX",
-      "isComplete": false
+      "isComplete": true
     },
     {
       "userId": "oLY3spiUT",
@@ -81,7 +81,7 @@
       "userId": "oLY3spiUT",
       "bookId": "AKToktcgd",
       "id": "NLLe9WnqL",
-      "isComplete": true
+      "isComplete": false
     }
   ]
 }

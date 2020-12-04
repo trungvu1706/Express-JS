@@ -1,6 +1,6 @@
 h1 INFOMATION ABOUT THE BOOK
 
-form(action="/books/" + book.id + "/view", method="view")
+form(action="/books/" + book.id + "/view", method="get")
     lable Book Id 
     span &nbsp
     input(type="text", value= book.id disabled)
