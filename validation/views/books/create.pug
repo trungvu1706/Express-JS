@@ -1,0 +1,20 @@
+extends ../layouts/common 
+block content
+
+    h1  CREATE NEW BOOKS
+
+    form(action="/books/create", method="POST")
+        .form-group
+        label(for="title") Book Name
+            input#title.form-control(type="text", name="title")
+
+        .form-group
+        label(for="description") Description
+            input#description.form-control(type="text", name="description")
+    
+    
+            button.btn.btn-success.mt-3  Create
+        
+    
+
+
