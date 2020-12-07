@@ -1,0 +1,20 @@
+extends ../layouts/common 
+block content
+
+    h1 CREATE TRANSACTION
+
+    form(action="/transactions/create", method="POST")
+        .form-group
+        lable User ID 
+            select.form-control(name="userId")
+                each user in users
+                    option(value=user.id)= user.name
+        
+            
+        .form-group    
+        lable Book ID 
+            select.form-control(name="bookId")
+                each book in books
+                    option(value=book.id)= book.title
+    
+            button.btn.btn-success.mt-3 Create 

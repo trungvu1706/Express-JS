@@ -1,0 +1,32 @@
+extends ../layouts/common 
+block content
+    
+    
+    
+    h1 UPDATE STATUS OF TRANSACTIONS
+
+    
+
+    form(action="/transactions/" + transaction.id + "/update", method="POST")
+        .form-group
+        lable User ID
+        select(name="userId").form-control
+                each user in users
+                    option(value=user.id, selected=transaction.userId===user.id)= user.name
+                           
+                
+        .form-group
+        lable Book ID
+        select(name="bookId").form-control
+            each book in books
+                option(value=book.id, selected=transaction.bookId===book.id)= book.title
+        
+        
+
+        .form-group
+        lable Status
+        select(name="isComplete").form-control
+            option(value="true", selected=transaction.isComplete) returned
+            option(value="false", selected=!transaction.isComplete) rent
+       
+        button.btn.btn-success.mt-3 Submit

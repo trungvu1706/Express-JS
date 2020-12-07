@@ -1,0 +1,38 @@
+extends ../layouts/common 
+block content
+    
+    h1 USERS 
+
+    a.btn.btn-success(href="/users/create") Create
+     
+
+    form.form-group(action="/users/search", method="GET")
+        lable User Name 
+        input(type="text", name="q").form-control
+       
+        button.btn.btn-success.mt-3 Search   
+
+    
+    table.table.table-dark 
+        tr
+            th Name
+            th Phone
+            th Infomation
+            th Update
+            th Delete
+
+        each user in lists
+            tr
+                td= user.name
+                td= user.phone
+                td
+                    a(href="/users/" + user.id + "/view") View
+                td
+                    a(href="/users/" + user.id + "/update") Update
+                td
+                    a(href="/users/" + user.id + "/delete") Delete         
+
+                    
+    div
+        a(href="/home").btn.btn-success Back
+        
