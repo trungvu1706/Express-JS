@@ -1,0 +1,16 @@
+extends ../layouts/common 
+block content
+
+    h1 UPDATE PROFILE 
+
+    form(action="/users/" + user.id + "/update", method="POST")
+        .form-group
+        label(for="name") User Name
+            input#name.form-control(type="text", name="name")
+
+
+        .form-group
+        label(for="phone") User Phone
+            input#phone.form-control(type="text", name="phone")
+
+            button.btn.btn-success.mt-3 Create

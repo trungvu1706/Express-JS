@@ -1,0 +1,70 @@
+extends ../layouts/common 
+block content
+
+    h1 TRANSACTION
+
+    a.btn.btn-success.mb-3(href="/transactions/create") Create
+
+
+    table.table.table-dark
+        tr 
+            th User Name
+            th Book Name
+            th Status     
+            th Action
+
+        each transaction in transactions   
+            tr
+                td= transaction.user.name
+                td= transaction.book.title
+                if(transaction.isComplete)
+                    td Returned
+                else
+                    td Rent
+                td 
+                    a(href="/transactions/" + transaction.id + "/update") Update
+
+    div
+        a.btn.btn-success(href="/home") Back                    
+                
+
+   
+        
+    
+    
+    //- form(action="/transactions")
+    //-     ul
+    //-         each transaction in transactions
+    //-             li
+        
+    //-                 lable User Name
+    //-                 span &nbsp
+    //-                 input(type="text", value=transaction.user.name, disabled)
+    //-                 br
+                
+
+    //-                 lable Book Name
+    //-                 span &nbsp
+    //-                 input(type="text", value=transaction.book.title, disabled)
+    //-                 br
+
+    //-                 lable status
+    //-                 span &nbsp
+    //-                 if transaction.isComplete
+    //-                     input(type="text", disabled, value="Returned")
+    //-                 else 
+    //-                     input(type="text", disabled, value="Rent")
+    //-                 br
+
+    //-                 a(href="/transactions/" + transaction.id + "/update") Update
+
+    //- div
+    //- a(href="/home") Back
+                
+
+                   
+
+                    
+
+    
+
