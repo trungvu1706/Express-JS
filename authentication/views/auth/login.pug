@@ -1,0 +1,23 @@
+extends ../layouts/common 
+block content
+    .row.justify-content-md-center
+        .col-md-6
+            h1 LOGIN
+
+            if errors
+                each error in errors
+                    .alert.alert-danger= error
+                    
+            form(action="/auth/login", method="POST")
+                .form-group
+                    label(for="email") Email
+                    input#email.form-control.form-control-lg(type="text", name="email", value= values ? values.email : "")
+                    
+                .form-group
+                    label(for="password") Password
+                    input#password.form-control.form-control-lg(type="password", name="password", value= values ? values.password : "")
+                        
+                button.btn.btn-success.mr-3 Login  
+
+                a(href="/users/create").btn.btn-success Create        
+
