@@ -48,8 +48,6 @@ module.exports.postUpdate = function(req, res, next) {
         errors.push('Phone is invalid');
     }
 
-    console.log(errors)
-
     if (errors.length) {
         return res.render('users/update', {
             errors: errors,

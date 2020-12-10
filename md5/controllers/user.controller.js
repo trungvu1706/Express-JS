@@ -1,5 +1,6 @@
 var shortid = require('shortid');
 var db = require('../db');
+var bcrypt = require('bcrypt');
 
 module.exports.index = function(req, res) {
     var users = [];
@@ -23,7 +24,7 @@ module.exports.index = function(req, res) {
         users: users,
         userLogin
     });
-    console.log(userLogin);
+
 };
 
 module.exports.create = function(req, res) {
@@ -75,20 +76,32 @@ module.exports.update = function(req, res) {
 
 };
 
-module.exports.postCreate = function(req, res) {
+module.exports.postCreate = async function(req, res) {
     req.body.id = shortid.generate();
     req.body.isAdmin = JSON.parse(req.body.isAdmin);
+    req.body.passWrong = 0;
+
     var email = req.body.email;
+    var phone = req.body.phone;
+    var password = req.body.password;
+
+
     var user = db.get('users').find({ email }).value();
+
     if (user) {
         errors.push('Email does exist!');
     }
 
-    var phone = req.body.phone;
-    var user = db.get('users').find({ phone }).value();
-    if (user) {
+    var isExistedPhone = db.get('users').find({ phone }).value();
+
+    if (isExistedPhone) {
         errors.push('Phone does exist!');
     }
+
+
+    var saltRounds = 10;
+    var hash = await bcrypt.hash(password, saltRounds);
+    req.body.password = hash;
 
     db.get('users').push(req.body).write();
     res.redirect('/users');
@@ -99,6 +112,7 @@ module.exports.postUpdate = function(req, res) {
     var name = req.body.name;
     var phone = req.body.phone;
     var password = req.body.password;
+
 
     var user = db.get('users').find({ id }).value();
 

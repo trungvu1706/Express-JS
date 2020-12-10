@@ -43,14 +43,6 @@
   ],
   "users": [
     {
-      "name": "hoang anh",
-      "phone": "0977641445",
-      "email": "thichsadoa1995@yahoo.com",
-      "password": "123456",
-      "isAdmin": true,
-      "id": "2O3GhMU2H"
-    },
-    {
       "name": "Lê Quang Tuấn ",
       "phone": "0955577333",
       "email": "khoi123@gmail.com",
@@ -78,17 +70,43 @@
       "name": "Vũ Tiến Trung",
       "phone": "0911848615",
       "email": "trung111@gmail.com",
-      "password": "5923f33de279fed8e31358d923a53a29",
+      "password": "trung123",
       "isAdmin": true,
-      "id": "9Az9kouKo"
+      "id": "9Az9kouKo",
+      "passWrong": null
     },
     {
-      "name": "tuan",
-      "phone": "0977641442",
-      "email": "trung222@gmail.com",
+      "name": "khoi test",
+      "phone": "0977641447",
+      "email": "khoi_test3@gmail.com",
       "password": "123123",
       "isAdmin": false,
-      "id": "1vxSXe43i"
+      "id": "5luWwpWOZ"
+    },
+    {
+      "name": "Vũ Tiến Dũng",
+      "phone": "0911848617",
+      "email": "dung123@gmail.com",
+      "password": "$2b$10$Tr22U3h5lVeUqZMMDkC0bueBQVtV7wke6Um2wU7YntQzcHYFn.U.i",
+      "isAdmin": true,
+      "id": "qu0mey8Ha"
+    },
+    {
+      "name": "Vũ Tiến Đức",
+      "phone": "0911858600",
+      "email": "duc86@gmail.com",
+      "password": "$2b$10$bzwClNskjh2qykUsxvj6cem0/JsW91XpdWAk2DIwcmClwrPZNVsEW",
+      "isAdmin": false,
+      "id": "qlYMudFSn"
+    },
+    {
+      "name": "Trần Văn Tú",
+      "phone": "0911848620",
+      "email": "tu@gmail.com",
+      "password": "$2b$10$.A01/UaaAaWsSH99Z0jHXuDNT3uV1ltlAscGSNfHW07zljKl3BXLi",
+      "isAdmin": false,
+      "id": "BQ7PFU9Wd",
+      "passWrong": 0
     }
   ],
   "transactions": [
@@ -105,10 +123,10 @@
       "isComplete": false
     },
     {
-      "userId": "oLY3spiUT",
+      "userId": "ThYgGbl5K",
       "bookId": "uixbbcEG0",
       "id": "zgCFLUI0b",
-      "isComplete": false
+      "isComplete": true
     },
     {
       "userId": "YvxXmAMz6",
