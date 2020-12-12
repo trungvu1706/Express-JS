@@ -1,11 +1,14 @@
+var bcrypt = require('bcrypt');
+
 var shortid = require('shortid');
 var db = require('../db');
-var bcrypt = require('bcrypt');
+
 
 module.exports.index = function(req, res) {
     var users = [];
 
-    var userLogin = db.get('users').find({ id: req.cookies.userId }).value();
+    var userLogin = db.get('users').find({ id: req.signedCookies.userId }).value();
+    console.log(userLogin);
     if (!userLogin) {
         return res.render('users/index', {
             errors: [
@@ -15,7 +18,7 @@ module.exports.index = function(req, res) {
     }
 
     if (userLogin.isAdmin) {
-        users = db.get('users').value()
+        users = db.get('users').value();
     } else {
         users = db.get('users').filter({ id: userLogin.id }).value();
     }
@@ -67,7 +70,6 @@ module.exports.view = function(req, res) {
 module.exports.update = function(req, res) {
     var id = req.params.userId;
     var newUser = db.get('users').find({ id }).value();
-    console.log('userUser', newUser);
 
     res.render('users/update', {
         user: newUser,

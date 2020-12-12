@@ -23,18 +23,13 @@ router.get('/:userId/view', controller.view);
 
 router.get('/:userId/update', controller.update);
 
-
-
-
-
-
-
-
 // POST
+router.post('/create', validate.postCreate, controller.postCreate);
+
 router.post('/:userId/update', validate.postUpdate, controller.postUpdate);
 
 
-router.post('/create', validate.postCreate, controller.postCreate);
+
 
 
 module.exports = router;

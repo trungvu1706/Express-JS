@@ -1,3 +1,6 @@
+require('dotenv').config();
+
+
 var express = require('express');
 var app = express();
 var path = require('path');
@@ -21,7 +24,7 @@ app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 app.use(express.static('public'));
-app.use(cookieParser('P4sdfsafsadfsP034'));
+app.use(cookieParser(process.env.COOKIE_SECRET_KEY));
 
 
 app.use('/books', authMiddleware.requireAuth, bookRoute);

@@ -108,6 +108,15 @@
       "isAdmin": false,
       "id": "BQ7PFU9Wd",
       "passWrong": 0
+    },
+    {
+      "name": "Vũ Tiến Trung",
+      "phone": "0911848611",
+      "email": "vtrung1795@gmail.com",
+      "password": "$2b$10$Qo83e3xql9JK2TWKeD4Eee5nu8Jx2RHfEUQRRJayuqTDozJ1IWZaK",
+      "isAdmin": true,
+      "id": "llil34uym",
+      "passWrong": 6
     }
   ],
   "transactions": [
