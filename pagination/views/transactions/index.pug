@@ -1,0 +1,44 @@
+extends ../layouts/common 
+block content
+
+    h1 TRANSACTION
+
+    if errors
+        each error in errors
+            .alert.alert-danger= error
+    if(userLogin.isAdmin)
+        a.btn.btn-success.mb-3(href="/transactions/create") Create
+
+
+    table.table.table-dark
+        tr 
+            th User Name
+            th Book Name
+            th Status     
+            th Action
+
+        each transaction in transactions   
+            tr
+                td= transaction.user.name
+                td= transaction.book.title
+                if(transaction.isComplete)
+                    td Returned
+                else
+                    td Rent
+                td 
+                    a(href="/transactions/" + transaction.id + "/update") Update
+
+    div
+        a.btn.btn-success(href="/home") Back                    
+                
+   
+        
+    
+    
+    
+                   
+
+                    
+
+    
+
