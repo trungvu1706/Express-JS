@@ -32,12 +32,24 @@ module.exports.postLogin = async function(req, res) {
         });
     }
 
+    if (user.passWrong > 4) {
+        return res.render('auth/login', {
+            errors: [
+                'Your account have Your account is temporarily locked lock '
+            ]
+
+        })
+    }
+
     var matchPassword = await bcrypt.compare(password, user.password);
+    console.log(matchPassword);
 
     if (!matchPassword) {
         db.get('users').find({ email }).assign({ passWrong: user.passWrong + 1 }).write();
-        console.log(user.passWrong);
-        if (user.passWrong === 4) {
+        // console.log(user.passWrong);
+
+
+        if (user.passWrong + 1 > 4) {
             await sgMail.send(msg);
             return res.redirect('login');
         }

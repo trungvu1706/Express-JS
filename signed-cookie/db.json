@@ -116,7 +116,7 @@
       "password": "$2b$10$Qo83e3xql9JK2TWKeD4Eee5nu8Jx2RHfEUQRRJayuqTDozJ1IWZaK",
       "isAdmin": true,
       "id": "llil34uym",
-      "passWrong": 6
+      "passWrong": 0
     }
   ],
   "transactions": [
