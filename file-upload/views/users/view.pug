@@ -1,0 +1,22 @@
+extends ../layouts/common 
+block content
+    
+    
+    h1 USER PROFILE
+
+
+    table.table.table-dark  
+        tr  
+            th ID
+            th Name
+            th Phone
+        
+        tr  
+            td= user.id
+            td= user.name
+            td= user.phone
+
+    div
+        a.btn.btn-success.mt-3(href="/users") Back
+
+    

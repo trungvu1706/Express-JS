@@ -1,0 +1,40 @@
+extends ../layouts/common 
+block content
+
+    h1 INFOMATION ABOUT THE BOOK
+
+
+    table.table.table-dark  
+        tr  
+            th ID
+            th Title
+            th Decription
+        
+        tr  
+            td= book.id
+            td= book.title
+            td= book.description
+
+    div
+        a.btn.btn-success.mt-3(href="/books") Back
+        
+
+
+    //- form(action="/books/" + book.id + "/view", method="get")
+    //-     lable Book Id 
+    //-     span &nbsp
+    //-     input(type="text", value= book.id disabled)
+    //-     br
+
+    //-     lable Book Name
+    //-     input(type="text", value= book.title disabled)
+    //-     span &nbsp
+    //-     br
+
+    //-     lable Description
+    //-     span &nbsp
+    //-     input(type="text", value= book.description disabled)
+
+
+
+    
