@@ -1,0 +1,48 @@
+extends ../layouts/common 
+block content
+
+   h1 LIST OF BOOKS FOR YOU
+   .col-md-6
+      a.btn.btn-success.mb-3(href="/books/create") Create book 
+
+      form(action="/books/search", method="search")
+         .form-group
+            lable Book Name
+            input.form-control(type="text", name="q")
+         
+         button.btn.btn-success Search
+
+   table.table.table-dark
+      tr 
+         th Title
+            th Infomation
+            th Update
+            th Cart
+            th Delete
+
+         each item in lists
+            tr 
+               td= item.title
+               td 
+                  a(href="/books/" + item.id + "/view") View
+               td
+                  a(href="/books/" + item.id + "/update") Update Book
+               td 
+                  a(href="/cart/add/" + item.id) Add         
+               td
+                  a(href="/books/" + item.id + "/delete") Delete Book
+                  
+   div
+      a.btn.btn-success.mt-3(href="/home") Back
+     
+           
+               //- li= item.title
+               //- a(href="/books/" + item.id + "/view") View
+               //- span &nbsp
+               //- a(href="/books/" + item.id + "/delete") Delete Book
+               //- span &nbsp
+               //- a(href="/books/" + item.id + "/update") Update Book
+
+               
+
+
