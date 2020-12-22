@@ -69,7 +69,6 @@ module.exports.postLogin = async function(req, res) {
             signed: true
         });
         res.redirect('/home');
-
     } catch (error) {
         console.log(error);
     }
