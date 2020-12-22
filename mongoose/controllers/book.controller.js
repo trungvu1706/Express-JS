@@ -23,7 +23,7 @@ module.exports.search = async function(req, res) {
         var q = req.query.q;
         // var books = await Book.find(); // 10s
 
-        var books = await Book.find({ title: new RegExp(q) });
+        var books = await Book.find({ title: { $regex: q, $options: 'i ' } });
 
         // var matchedBook = books.filter(function(book) {
         //     return book.title.toLowerCase().indexOf(q.toLowerCase()) !== -1;
@@ -71,6 +71,7 @@ module.exports.delete = async function(req, res) {
         var id = req.params.bookId;
         await Book.deleteOne({ _id: id });
         res.redirect('/books');
+
     } catch (error) {
         console.log(error);
     }

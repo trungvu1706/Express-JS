@@ -10,9 +10,13 @@ var transactionSchema = new mongoose.Schema({
         default: false
     },
     books: [{
-        book: mongoose.Schema.Types.ObjectId,
+        book: {
+            ref: 'Book',
+            type: mongoose.Schema.Types.ObjectId
+        },
         quantity: Number
-    }]
+    }],
+
 }); // schema
 
 var Transaction = mongoose.model('Transaction', transactionSchema, 'transactions'); // model

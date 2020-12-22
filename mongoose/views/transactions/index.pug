@@ -22,11 +22,11 @@ block content
             tr
                 td= transaction.user.name
                 td 
-                    each book in transaction.books
-                        div #{book.title}
+                    each cart in transaction.books
+                        div #{cart.book.title}
                 td
-                    each book in transaction.books
-                        div #{book.quantity}
+                    each cart in transaction.books
+                        div #{cart.quantity}
                 if(transaction.isComplete)
                     td Returned
                 else

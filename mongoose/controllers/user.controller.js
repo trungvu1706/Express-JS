@@ -1,4 +1,5 @@
 var bcrypt = require('bcrypt');
+const fs = require('fs');
 
 var cloudinary = require('cloudinary').v2;
 
@@ -11,29 +12,35 @@ cloudinary.config({
 });
 
 
-module.exports.index = function(req, res) {
-    var users = [];
+module.exports.index = async function(req, res) {
 
-    var userLogin = db.get('users').find({ id: req.signedCookies.userId }).value();
+    try {
+        var users = [];
 
-    if (!userLogin) {
-        return res.render('users/index', {
-            errors: [
-                'Your account is unvalid'
-            ]
+        var userLogin = await User.find({ id: req.signedCookies.userId });
+
+        if (!userLogin) {
+            return res.render('users/index', {
+                errors: [
+                    'Your account is unvalid'
+                ]
+            });
+        }
+
+        if (userLogin.isAdmin) {
+            users = await User.find();
+        } else {
+            users = await User.find({ id: userLogin.id });
+        }
+
+        res.render('users/index', {
+            users: users,
+            userLogin
         });
+    } catch (error) {
+        console.log(error);
     }
 
-    if (userLogin.isAdmin) {
-        users = db.get('users').value();
-    } else {
-        users = db.get('users').filter({ id: userLogin.id }).value();
-    }
-
-    res.render('users/index', {
-        users: users,
-        userLogin
-    });
 
 };
 
@@ -41,62 +48,83 @@ module.exports.create = function(req, res) {
     res.render('users/create');
 };
 
-module.exports.search = function(req, res) {
-    var q = req.query.q;
-    var searchUser = db.get('users').value();
-    var matchedUser = searchUser.filter(function(user) { // [{ name: "" }]
-        return user.name.toLowerCase().indexOf(q.toLowerCase()) !== -1;
-    });
-    res.render('users/index', {
-        users: matchedUser
-    });
+module.exports.search = async function(req, res) {
+
+    try {
+        var q = req.query.q;
+        var searchUser = await User.find();
+        var matchedUser = searchUser.filter(function(user) { // [{ name: "" }]
+            return user.name.toLowerCase().indexOf(q.toLowerCase()) !== -1;
+        });
+        res.render('users/index', {
+            users: matchedUser
+        });
+    } catch (error) {
+        console.log(error);
+    }
+
 };
 
 
-module.exports.get = function(req, res) {
-    var id = req.params.userId;
-    db.get('users').find({ id }).value();
+module.exports.delete = async function(req, res) {
+
+    try {
+        var id = req.params.userId;
+        await User.deleteOne({ _id: id });
+        res.redirect('/users');
+
+    } catch (error) {
+        console.log(error);
+    }
 
 };
 
-module.exports.delete = function(req, res) {
-    var id = req.params.userId;
-    db.get('users').remove({ id }).write();
-    res.redirect('/users');
+module.exports.view = async function(req, res) {
+
+    try {
+        var id = req.params.userId;
+        var user = await User.findOne({ _id: id });
+        res.render('users/view', {
+            user: user
+        });
+
+    } catch (error) {
+        console.log(error);
+    }
+
 };
 
-module.exports.view = function(req, res) {
-    var id = req.params.userId;
-    var user = db.get('users').find({ id }).value();
-    res.render('users/view', {
-        user: user
-    });
-};
+module.exports.update = async function(req, res) {
 
-module.exports.update = function(req, res) {
-    var id = req.params.userId;
-    var newUser = db.get('users').find({ id }).value();
+    try {
+        var id = req.params.userId;
+        var user = await User.findOne({ _id: id });
 
-    res.render('users/update', {
-        user: newUser,
-        values: newUser
-    });
+        res.render('users/update', {
+            user,
+            values: user
+        });
+
+    } catch (error) {
+        console.log(error);
+    }
+
 
 };
 
 module.exports.postCreate = async function(req, res, next) {
+
     try {
-        req.body.id = shortid.generate();
         req.body.isAdmin = JSON.parse(req.body.isAdmin);
         req.body.passWrong = 0;
 
         if (req.file) {
             const { secure_url } = await cloudinary.uploader.upload(req.file.path);
             req.body.avatar = secure_url;
+            fs.unlinkSync(req.file.path);
         } else {
             req.body.avatar = '/uploads/default-avatar.png';
         }
-        // req.body.avatar = 'uploads/' + req.file.filename;
         // public/uploads/img => "public/uploads/img" =>  ["public", "uploads", "img"] => ["uploads", "img"] => "uploads/img".
 
         var email = req.body.email;
@@ -104,14 +132,13 @@ module.exports.postCreate = async function(req, res, next) {
         var password = req.body.password;
         var errors = [];
 
-
-        var user = db.get('users').find({ email }).value();
+        var user = User.find({ email });
 
         if (user) {
             errors.push('Email does exist!');
         }
 
-        var isExistedPhone = db.get('users').find({ phone }).value();
+        var isExistedPhone = User.find({ phone });
 
         if (isExistedPhone) {
             errors.push('Phone does exist!');
@@ -121,7 +148,9 @@ module.exports.postCreate = async function(req, res, next) {
         var hash = await bcrypt.hash(password, saltRounds);
         req.body.password = hash;
 
-        db.get('users').push(req.body).write();
+        var userPassword = new User(req.body);
+        await userPassword.save();
+        // db.get('users').push(req.body).write();
         res.redirect('/users');
 
     } catch (error) {
@@ -130,34 +159,52 @@ module.exports.postCreate = async function(req, res, next) {
 
 };
 
-module.exports.postUpdate = function(req, res) {
-    var id = req.params.userId;
-    var name = req.body.name;
-    var phone = req.body.phone;
-    var password = req.body.password;
-    var avatar = req.body.avatar;
-    avatar = req.file.path.split('/').slice(1).join('/');
+module.exports.postUpdate = async function(req, res) {
+    try {
+        var id = req.params.userId;
+        var phone = req.body.phone;
+        var password = req.body.password;
+        // avatar = req.file.path.split('/').slice(1).join('/');
 
+        if (req.file) {
+            const image = await cloudinary.uploader.upload(req.file.path);
+            req.body.avatar = image.secure_url;
+            fs.unlinkSync(req.file.path)
+        } else {
+            req.body.avatar = '/uploads/default-avatar.png';
+        }
 
-    var user = db.get('users').find({ id }).value();
+        var user = await User.findOne({ _id: id });
 
-    if (!user) {
-        return res.render('users/update', {
-            errors: ['User not found'],
-            user: { id }
-        })
+        if (!user) {
+            return res.render('users/update', {
+                errors: ['User not found'],
+                user: { id }
+            })
+        }
+
+        var isExistedPhone = await User.findOne({ phone });
+        // null || {  }
+
+        if (isExistedPhone) {
+            return res.render('users/update', {
+                errors: ['Phone is existed'],
+                user: { id }
+            })
+        }
+
+        var saltRounds = 10;
+        var hash = await bcrypt.hash(password, saltRounds);
+        req.body.password = hash;
+
+        var userPassword = new User(req.body);
+        await userPassword.save();
+
+        await User.update({ _id: id }, req.body);
+        res.redirect('/users');
+
+    } catch (error) {
+        console.log(error);
     }
 
-    var isExistedPhone = db.get('users').find({ phone }).value();
-    // undefined || {  }
-
-    if (isExistedPhone) {
-        return res.render('users/update', {
-            errors: ['Phone is existed'],
-            user: { id }
-        })
-    }
-
-    db.get('users').find({ id }).assign({ name, phone, password, avatar }).write();
-    res.redirect('/users');
 };

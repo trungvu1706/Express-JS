@@ -1,6 +1,5 @@
 const isVietnamesePhoneNumber = require('../helpers/check-phone-number');
 const isValidPersonName = require('../helpers/check-person-name');
-const db = require('../db');
 const isValidateEmail = require('../helpers/check-email');
 
 module.exports.postCreate = function(req, res, next) {
@@ -39,6 +38,7 @@ module.exports.postCreate = function(req, res, next) {
 
 module.exports.postUpdate = function(req, res, next) {
     var errors = [];
+    console.log(req.body)
 
     if (!isValidPersonName(req.body.name)) {
         errors.push('Name is invalid')

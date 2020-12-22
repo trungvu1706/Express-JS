@@ -1,118 +1,98 @@
-var shortid = require('shortid');
-var db = require('../db');
+var User = require('../models/user.model');
+var Book = require('../models/book.model');
+var Transaction = require('../models/transaction.model');
 
-module.exports.index = function(req, res) {
+module.exports.index = async function(req, res) {
+    try {
+        var transactions = await Transaction.find()
+            .populate({ path: 'user', select: 'name avatar' })
+            .populate({ path: 'books.book' })
 
-    var users = db.get('users').value();
-    var books = db.get('books').value();
-    var transactions = [];
-    var result = [];
+        //se console.log(req.user)
 
-    var page = parseInt(req.query.page) || 1; // n
-    var perPage = 4; // x
-
-    var drop = (page - 1) * perPage;
-
-
-    var userLogin = db.get('users').find({ id: req.signedCookies.userId }).value();
-    if (!userLogin) {
-        return res.render('transactions/index', {
-            errors: [
-                'Your account is unvalid!'
-            ]
+        res.render('transactions/index', {
+            transactions,
+            userLogin: req.user
         });
+    } catch (error) {
+        console.log(error);
     }
 
-    if (userLogin.isAdmin) {
-        transactions = db.get('transactions').drop(drop).take(perPage).value();
+};
 
-    } else {
-        transactions = db.get('transactions').filter({ userId: userLogin.id }).value();
+module.exports.create = async function(req, res) {
 
+    try {
+        var books = await Book.find();
+        var users = await User.find();
+        res.render('transactions/create', {
+            books,
+            users
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+
+module.exports.update = async function(req, res) {
+
+    try {
+        var id = req.params.transactionId;
+        var transaction = await Transaction.findOne({ _id: id });
+
+        // null or undefined
+
+        var books = await Book.find();
+        var users = await User.find();
+
+        res.render('transactions/update', {
+            transaction,
+            books,
+            users
+        });
+
+    } catch (error) {
+        console.log(error);
     }
 
-    transactions.map(function(transaction) {
-        var obj = {
-            id: transaction.id,
-            user: {},
-            books: [],
-            isComplete: transaction.isComplete
-        };
-
-        users.map(function(user) {
-            if (transaction.userId === user.id) {
-                return obj.user = user;
-            }
-        });
-
-        books.map(function(book) {
-            transaction.books.map(function(bookInTransaction) {
-                if (book.id === bookInTransaction.bookId) {
-                    obj.books.push({
-                        id: book.id,
-                        title: book.title,
-                        quantity: bookInTransaction.quantity
-                    })
-                    console.log(obj.books)
-                }
-            })
-        });
-        // console.log(result);
-        return result.push(obj);
-    });
-
-    res.render('transactions/index', {
-        transactions: result,
-        userLogin
-    });
 };
 
+module.exports.postCreate = async function(req, res) {
 
+    try {
+        req.body.isComplete = false;
+        req.body.books = [{
+            book: req.body.bookId,
+            quantity: req.body.quantity
+        }];
 
+        delete req.body.bookId
+        delete req.body.quantity
 
-module.exports.create = function(req, res) {
-    var books = db.get('books').value();
-    var users = db.get('users').value();
+        var transaction = new Transaction(req.body);
+        await transaction.save();
 
-    res.render('transactions/create', {
-        books: books,
-        users: users
-    });
+        res.redirect('/transactions');
+
+    } catch (error) {
+        console.log(error);
+    }
+
 };
 
+module.exports.postUpdate = async function(req, res) {
 
-module.exports.update = function(req, res) {
-    var id = req.params.transactionId;
-    var newTransaction = db.get('transactions').find({ id }).value();
+    try {
+        var id = req.params.transactionId;
+        req.body.isComplete = JSON.parse(req.body.isComplete);
 
-    // null or undefined
+        await Transaction.updateOne({ _id: id }, req.body);
 
-    var books = db.get('books').value();
-    var users = db.get('users').value();
+        res.redirect('/transactions');
 
-    res.render('transactions/update', {
-        transaction: newTransaction,
-        books: books,
-        users: users
-    });
-};
+    } catch (error) {
+        console.log(error);
+    }
 
-module.exports.postCreate = function(req, res) {
-    req.body.id = shortid.generate();
-    req.body.isComplete = false;
-    req.body.isAdmin = false;
-
-    db.get('transactions').push(req.body).write();
-
-    res.redirect('/transactions');
-};
-
-module.exports.postUpdate = function(req, res) {
-    var id = req.params.transactionId;
-
-    req.body.isComplete = JSON.parse(req.body.isComplete);
-
-    db.get('transactions').find({ id }).assign(req.body).write();
-
-    res.redirect('/transactions');
 }

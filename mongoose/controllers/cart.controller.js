@@ -1,9 +1,11 @@
-const shortid = require("shortid");
-const { result } = require("../db");
-const db = require("../db");
+var User = require('../models/user.model');
+var Book = require('../models/book.model');
+var Cart = require('../models/cart.model');
+var Transaction = require('../models/transaction.model');
 
-module.exports.addToCart = function(req, res) {
+module.exports.addToCart = async function(req, res) {
     try {
+
         var bookId = req.params.bookId; // lay id cua book
         var sessionId = req.signedCookies.sessionId; // lay id cua session
 
@@ -11,57 +13,41 @@ module.exports.addToCart = function(req, res) {
             return res.redirect('/books');
         }
 
-        var count = db.get('sessions')
-            .find({ id: sessionId })
-            .get('cart.' + bookId, 0)
-            .value();
+        // B1 Click button add to cart
+        // B2 Kiem tra xem cart da ton tai hay chua
+        // Neu cart ko ton tai thi tao moi
+        // Neu cart da ton tai roi => update so luong len 1 don vi
 
-        db.get('sessions')
-            .find({ id: sessionId })
-            .set('cart.' + bookId, count + 1) // => cart.bookId : value 
-            .write();
+        var isExistedCart = await Cart.findOne({ book: bookId, session: sessionId });
+
+        if (!isExistedCart) {
+            const cart = new Cart({ book: bookId, session: sessionId })
+            await cart.save();
+            return res.redirect('/books');
+        }
+
+        await Cart.findOneAndUpdate({ _id: isExistedCart._id }, {
+            $inc: {
+                quantity: 1
+            }
+        });
 
         res.redirect('/books');
-
-
     } catch (error) {
         console.log(error);
     }
 
 };
 
-module.exports.index = function(req, res) {
+module.exports.index = async function(req, res) {
 
     try {
-        var sessionId = req.signedCookies.sessionId;
-        var session = db.get('sessions')
-            .find({ id: sessionId })
-            .value();
+        var cart = await Cart.find()
+            .populate({ path: 'book', select: 'title' });
 
-        var books = db.get('books').value();
-        var results = [];
-
-        console.log(session, sessionId)
-
-        var convertCart = Object.keys(session.cart);
-
-        convertCart.map(function(key) {
-            var obj = {
-                id: key,
-                quantity: session.cart[key]
-            }
-
-            books.map(function(book) {
-                if (obj.id === book.id) {
-                    return obj.title = book.title;
-                }
-            });
-
-            return results.push(obj);
-        });
-
+        // console.log(cart);
         res.render('cart/index', {
-            cart: results
+            cart
         });
 
     } catch (error) {
@@ -69,47 +55,29 @@ module.exports.index = function(req, res) {
     }
 }
 
-module.exports.postCart = function(req, res) {
+module.exports.postCart = async function(req, res) {
 
     try {
         var sessionId = req.signedCookies.sessionId; // lay id cua session
-        var userId = req.signedCookies.userId;
-        var session = db.get('sessions').find({ id: sessionId }).value();
-        var convertCart = Object.keys(session.cart);
+        var carts = await Cart.find({ session: sessionId });
+        var books = [];
 
-        /*
-            {
-                "userId": "uQJP8isZG",
-                "books": [
-                    { bookId: 'abc', quantity: 4 },
-                    { bookId: 'abc', quantity: 4 }
-                ],
-                "id": "XERt6wWW6",
-                "isComplete": false,
-            },
-        */
-        var obj = {
-            id: shortid.generate(),
-            userId: userId,
-            isComplete: false,
-            books: []
+        for (cart of carts) {
+            books.push({
+                book: cart.book,
+                quantity: cart.quantity
+            })
         }
 
-        convertCart.map(function(key) {
-            obj.books.push({
-                bookId: key,
-                quantity: session.cart[key],
-            })
-        });
+        var transaction = new Transaction({
+            user: req.user._id,
+            isComplete: false,
+            books: carts
+        })
 
-        db.get('transactions').push(obj).write();
+        await transaction.save();
 
-        db.get('sessions').remove({ id: sessionId }).write();
-
-        res.clearCookie("sessionId");
-
-        // sau khi them vao transaction thi xoa gio hang (session) di
-
+        await Cart.deleteMany({ session: sessionId });
         res.redirect('/books');
     } catch (error) {
         console.log(error);

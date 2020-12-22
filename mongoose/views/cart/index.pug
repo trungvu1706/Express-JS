@@ -4,14 +4,12 @@ block content
     h1 Your Cart
         table.table.table-dark
             tr
-                th id
                 th Tittle
                 th Quantity
 
             each item in cart
                 tr
-                    td=item.id
-                    td=item.title 
+                    td=item.book.title
                     td=item.quantity
         if(cart &&  cart.length )
             a.btn.btn-success(href="/cart/complete") Rent

@@ -3,18 +3,20 @@ var bcrypt = require('bcrypt');
 var sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-
-var db = require('../db');
+const User = require('../models/user.model');
 
 module.exports.login = function(req, res) {
     res.render('auth/login');
 };
 
 module.exports.postLogin = async function(req, res) {
+
     try {
         var email = req.body.email;
-        var password = req.body.password;
-        var user = db.get('users').find({ email }).value(); // kiem tra no co ton tai trong db ko
+        var password = req.body.password; // kiem tra no co ton tai trong db ko
+
+
+        var user = await User.findOne({ email });
 
         var msg = {
             to: 'trungvu1706@gmail.com',
@@ -46,9 +48,7 @@ module.exports.postLogin = async function(req, res) {
         console.log(matchPassword);
 
         if (!matchPassword) {
-            db.get('users').find({ email }).assign({ passWrong: user.passWrong + 1 }).write();
-            // console.log(user.passWrong);
-
+            await User.updateOne({ _id: user.id }, { passWrong: user.passWrong + 1 });
 
             if (user.passWrong + 1 > 4) {
                 await sgMail.send(msg);
@@ -63,7 +63,7 @@ module.exports.postLogin = async function(req, res) {
             });
         }
 
-        db.get('users').find({ email }).assign({ passWrong: 0 }).write();
+        await User.update({ _id: user.id }, { passWrong: 0 });
 
         res.cookie('userId', user.id, {
             signed: true

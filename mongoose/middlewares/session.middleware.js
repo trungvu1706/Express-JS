@@ -1,26 +1,23 @@
-var shortid = require('shortid');
+var Session = require('../models/session.model');
+var Cart = require('../models/cart.model');
 
-var db = require('../db');
+module.exports = async function(req, res, next) {
+    var sessionId = req.signedCookies.sessionId;
 
-module.exports = function(req, res, next) {
-    if (!req.signedCookies.sessionId) {
-        var sessionId = shortid.generate()
-        res.cookie('sessionId', sessionId, {
+    if (!sessionId) {
+        var session = new Session();
+        await session.save();
+
+        res.cookie('sessionId', session._id, {
             signed: true
         });
-
-        db.get('sessions')
-            .push({ id: sessionId, cart: {} })
-            .write();
     }
 
-
-    var sessions = db.get('sessions').find({ id: sessionId || req.signedCookies.sessionId }).value();
-    // console.log(sessions);
+    var cart = await Cart.find({ session: sessionId });
 
     var countCart = 0;
-    for (let item in sessions.cart) {
-        countCart += sessions.cart[item];
+    for (let item of cart) {
+        countCart += item.quantity
     }
 
 

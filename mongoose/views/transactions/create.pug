@@ -8,19 +8,21 @@ block content
             form(action="/transactions/create", method="POST")
                 .form-group
                     lable User ID 
-                    select.form-control(name="userId")
+                    select.form-control(name="user")
                         each user in users
-                            option(value=user.id)= user.name
+                            option(value=user._id)= user.name
                                 
                             
                 .form-group     
                     lable Book ID 
                     select.form-control(name="bookId")
                         each book in books
-                            option(value=book.id)= book.title
+                            option(value=book._id)= book.title
 
-                
-                        
+                .form-group
+                    label(for="quantity") Quantity
+                    input#quantity.form-control(type="number", name="quantity")
+                     
 
                 
                     
