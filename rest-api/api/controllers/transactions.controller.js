@@ -1,5 +1,3 @@
-var User = require('../../models/user.model');
-var Book = require('../../models/book.model');
 var Transaction = require('../../models/transaction.model');
 
 
