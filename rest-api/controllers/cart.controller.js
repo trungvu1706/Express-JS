@@ -39,11 +39,14 @@ module.exports.addToCart = async function(req, res) {
 
 };
 
-module.exports.index = async function(req, res) {
+module.exports.index = async function(req, res, next) {
 
     try {
         var cart = await Cart.find()
             .populate({ path: 'book', select: 'title' });
+
+        var a;
+        a.b();
 
         // console.log(cart);
         res.render('cart/index', {
@@ -51,7 +54,8 @@ module.exports.index = async function(req, res) {
         });
 
     } catch (error) {
-        console.log(error);
+        res.status(500).send('Something Broke!');
+        next(error);
     }
 }
 
