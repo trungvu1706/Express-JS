@@ -21,7 +21,11 @@ module.exports.addToCart = async function(req, res) {
         var isExistedCart = await Cart.findOne({ book: bookId, session: sessionId });
 
         if (!isExistedCart) {
-            const cart = new Cart({ book: bookId, session: sessionId })
+            const cart = new Cart({
+                book: bookId,
+                session: sessionId
+            });
+
             await cart.save();
             return res.redirect('/books');
         }

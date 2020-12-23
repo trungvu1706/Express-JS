@@ -44,10 +44,8 @@ module.exports.index = async function(req, res, next) {
     try {
         var cart = await Cart.find()
             .populate({ path: 'book', select: 'title' });
-
-        var a;
-        a.b();
-
+        // var a;
+        // a.b();
         // console.log(cart);
         res.render('cart/index', {
             cart

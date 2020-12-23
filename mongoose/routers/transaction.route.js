@@ -13,11 +13,10 @@ router.get('/create', controller.create);
 
 router.get('/:transactionId/update', validate.update, controller.update);
 
-
-
 // POST
 router.post('/create', controller.postCreate);
 
 router.post('/:transactionId/update', controller.postUpdate);
+
 
 module.exports = router;
