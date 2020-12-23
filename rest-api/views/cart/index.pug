@@ -1,0 +1,20 @@
+extends ../layouts/common 
+block content
+
+    h1 Your Cart
+        table.table.table-dark
+            tr
+                th Tittle
+                th Quantity
+
+            each item in cart
+                tr
+                    td=item.book.title
+                    td=item.quantity
+        if(cart &&  cart.length )
+            a.btn.btn-success(href="/cart/complete") Rent
+        else
+            a.btn.btn-success(href="/books") Back
+        
+
+        

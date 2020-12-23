@@ -1,0 +1,29 @@
+extends ../layouts/common 
+block content
+
+   
+    .row.justify-content-md-center  
+        .col-md-6
+            h1 CREATE TRANSACTION
+            form(action="/transactions/create", method="POST")
+                .form-group
+                    lable User ID 
+                    select.form-control(name="user")
+                        each user in users
+                            option(value=user._id)= user.name
+                                
+                            
+                .form-group     
+                    lable Book ID 
+                    select.form-control(name="bookId")
+                        each book in books
+                            option(value=book._id)= book.title
+
+                .form-group
+                    label(for="quantity") Quantity
+                    input#quantity.form-control(type="number", name="quantity")
+                     
+
+                
+                    
+                button.btn.btn-success Create                         
