@@ -21,7 +21,7 @@ var apiAuth = require('./api/routers/auth.router');
 var authMiddleware = require('./middlewares/auth.middleware');
 var sessionMiddleware = require('./middlewares/session.middleware');
 
-var port = 3000;
+var port = process.env.PORT || 3000;
 
 app.set('view engine', 'pug');
 app.set('views', path.resolve(__dirname, './views'));
